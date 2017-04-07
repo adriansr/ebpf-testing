@@ -1,4 +1,11 @@
-Usage:
+### EBPF Port filtering demo ###
+
+A simple EBPF program in C that builds outside the kernel
+and installs as a qdisc classifier. It drops all TCP packets
+that don't have port 80 as source or destination.
+
+Usage
+=====
  
 Build the EBPF module
 
@@ -32,4 +39,10 @@ and the classifier output will be printed:
 When done with the testing, remove devices and namespaces
 
     # stop
+
+Sources
+=======
+
+* iproute2's BPF sample http://code.metager.de/source/xref/linux/utils/iproute2/examples/bpf/bpf_prog.c
+* samples/bpf/test_cls_bpf.sh from Linux kernel https://github.com/torvalds/linux/blob/master/samples/bpf/test_cls_bpf.sh
 
