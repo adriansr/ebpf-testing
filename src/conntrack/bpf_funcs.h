@@ -61,6 +61,9 @@ static unsigned int (*get_prandom_u32)(void) __maybe_unused =
 static int (*bpf_trace_printk)(const char *fmt, int fmt_size, ...) =
 	(void *) BPF_FUNC_trace_printk;
 
+static uint64_t (*bpf_ktime_get_ns)(void) =
+	(void *) BPF_FUNC_ktime_get_ns;
+
 /* LLVM built-in functions that an eBPF C program may use to emit
  * BPF_LD_ABS and BPF_LD_IND instructions.
  */

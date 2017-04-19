@@ -38,7 +38,8 @@ function __setup {
     fi
     echo -n "Loading bpf program '$2'... "
     ip netns exec $NS tc qdisc add dev pair_$IFC clsact
-    ip netns exec $NS tc filter add dev pair_$IFC ingress bpf direct-action obj $1 sec $2 export $SOCKET
+    ip netns exec $NS strace tc filter add dev pair_$IFC ingress bpf obj $1 sec filter-in #export $SOCKET
+    ip netns exec $NS strace tc filter add dev pair_$IFC egress bpf obj $1 sec filter-out #export $SOCKET
     local status=$?
     if [ $status -ne 0 ]; then
         echo "FAIL"
@@ -57,7 +58,7 @@ function start {
     ip netns exec $NS ip link set pair_$IFC up
     ip address add $IP_OUT dev $IFC
     ip netns exec $NS ip address add $IP dev pair_$IFC
-    __setup bpf_conntrack.o classifier
+    __setup bpf_conntrack.o
     ip netns exec $NS python -m SimpleHTTPServer 80 &
     cat "$TRACEFILE"_pipe &
     PIPE_PID="$!"

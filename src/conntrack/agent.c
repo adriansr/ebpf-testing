@@ -120,7 +120,9 @@ int setup(int map_fd) {
     uint32_t key = 0;
     struct conntrack_conf_t conf = {0};
     conf.valid = true;
-    conf.source_address = htons( (10 << 24) | (123 << 16) | (56 << 8) | 2);
+    conf.source_address = /*htons*/( (10 << 24) | (123 << 16) | (45 << 8) | 2);
+    conf.expiration_ns = 10000000L;
+
     return bpf_update_elem(map_fd, &key, &conf, 0);
 }
 
@@ -156,7 +158,9 @@ int main(int argc, char *argv[]) {
     memset(fds, 0, sizeof(fds));
     memset(&aux, 0, sizeof(aux));
 
+    for (i=0;i<1;++i) {
     ret = bpf_map_set_recv(fd, fds, &aux, BPF_SCM_MAX_FDS);
+    
     if (ret >= 0) {
         ret = setup(fds[BPF_MAP_ID_CONF]);
         if (ret == 0) {
@@ -164,6 +168,7 @@ int main(int argc, char *argv[]) {
         } else {
             fprintf(stderr, "setup failed: %d %d\n", ret, errno);
         }
+    }
     }
 
     for (i = 0; i < aux.num_ent; i++)

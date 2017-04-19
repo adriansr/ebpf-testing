@@ -1,10 +1,10 @@
 BPF_TARGET=bpf_conntrack
-AGENT_TARGET: agent
+AGENT_TARGET=agent
 
 LLC ?= llc
 CLANG ?= clang
 
-all: $(BPF_TARGET).o $(OBJ)
+all: $(BPF_TARGET).o $(AGENT_TARGET)
 
 clean:
 	@rm -f *.o *.llvm $(BPF_TARGET) $(AGENT_TARGET)
